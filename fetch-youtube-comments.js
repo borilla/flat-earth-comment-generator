@@ -30,7 +30,7 @@ function fetchYouTubeComments(videoId, maxPages) {
 				fetchNextPage(commentPage.nextPageToken);
 			}
 			else {
-				console.info('Fetched all pages');
+				console.info('Fetched ' + pageNumber + ' pages');
 				resolve(comments);
 			}
 		}).catch(function (error) {
