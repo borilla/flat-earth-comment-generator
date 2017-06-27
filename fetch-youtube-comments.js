@@ -22,7 +22,6 @@ function fetchYouTubeComments(videoId, maxPages) {
 		fetchCommentPage(videoId, nextPageToken).then(function (commentPage) {
 			var pageComments = commentPage.comments.map(extractCommentText);
 
-			console.info('Fetched page ' + pageNumber);
 			comments = comments.concat(pageComments);
 
 			if (commentPage.nextPageToken && pageNumber < maxPages) {
@@ -30,11 +29,11 @@ function fetchYouTubeComments(videoId, maxPages) {
 				fetchNextPage(commentPage.nextPageToken);
 			}
 			else {
-				console.info('Fetched ' + pageNumber + ' pages');
+				console.info('Fetched ' + pageNumber + ' pages\n');
 				resolve(comments);
 			}
 		}).catch(function (error) {
-			console.error('Failed to fetch page ' + pageNumber);
+			console.error('Error fetching page ' + pageNumber + '\n');
 
 			reject(error);
 		});
