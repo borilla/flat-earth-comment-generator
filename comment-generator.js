@@ -1,28 +1,20 @@
-var MarkovChain = require('markovchain');
-var MAX_LENGTH = 40;
-
-function getFirstWord(comment) {
-	return comment.slice(0, comment.indexOf(' '));
-}
-
-function selectRandomFromArray(arr) {
-	return arr[Math.floor(Math.random() * arr.length)];
-}
+var MarkovGen = require('markov-generator');
 
 function CommentGenerator() {
-	this.markovChain = new MarkovChain();
-	this.starterWords = [];
+	this.comments = [];
 }
 
 CommentGenerator.prototype.train = function (comment) {
-	this.markovChain.parse(comment);
-	this.starterWords.push(getFirstWord(comment));
+	this.comments.push(comment);
 }
 
 CommentGenerator.prototype.generate = function () {
-	var starterWord = selectRandomFromArray(this.starterWords);
+	var markov = new MarkovGen({
+		input: this.comments,
+		minLength: 40
+	});
 
-	return this.markovChain.start(starterWord).end(MAX_LENGTH).process();
+	return markov.makeChain();
 }
 
 module.exports = CommentGenerator;

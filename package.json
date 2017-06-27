@@ -9,7 +9,7 @@
   "author": "borilla",
   "license": "MIT",
   "dependencies": {
-    "markovchain": "^1.0.2",
+    "markov-generator": "^1.2.2",
     "youtube-comment-api": "^3.0.1"
   }
 }
