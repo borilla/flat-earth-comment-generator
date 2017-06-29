@@ -1,5 +1,3 @@
-var ngram = require('n-gram');
-
 var N_GRAM_LENGTH = 8;
 var MAX_LENGTH = 1000;
 var TERMINAL_STRING = 'END';
