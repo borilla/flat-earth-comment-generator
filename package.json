@@ -1,7 +1,7 @@
 {
-  "name": "conspiracy-theory-comment-generator",
-  "version": "0.1.0",
-  "description": "Generates youtube-style comments on conspiracy theories",
+  "name": "flat-earth-comment-generator",
+  "version": "1.0.0",
+  "description": "Generates YouTube-style comments on the flat-earth conspiracy theory",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
