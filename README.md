@@ -2,7 +2,7 @@
 
 ## What it does
 
-Generates YouTube-style comments on conspiracy theories
+Generates YouTube-style comments on the flat-earth conspiracy
 
 ## How it does it
 
