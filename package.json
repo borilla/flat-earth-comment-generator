@@ -9,6 +9,6 @@
   "author": "borilla",
   "license": "MIT",
   "dependencies": {
-    "youtube-comment-api": "^3.0.1"
+    "youtube-comments-stream": "^1.4.0"
   }
 }

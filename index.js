@@ -1,29 +1,55 @@
-var fetchYouTubeComments = require('./fetch-youtube-comments');
-var fetchSampleComments = require('./fetch-sample-comments');
-var fixComment = require('./fix-comment');
-var CommentGenerator = require('./comment-generator');
+const commentsStream = require('youtube-comments-stream');
+const sampleComments = require('./data/sample-comments');
+var fixComment = require('./lib/fix-comment');
+var CommentGenerator = require('./lib/comment-generator');
 
 var VIDEO_ID = 'ksSZPNQaFP8';
-var MAX_COMMENT_PAGES = 10;
-var MIN_COMMENT_LENGTH = 10;
+var MIN_COMMENT_LENGTH = 40;
 var COMMENTS_TO_GENERATE = 10;
+var exitCode;
 
-function generateComments(sourceComments) {
+function initGenerator(onReady) {
+	var stream = commentsStream.mock(sampleComments);
 	var generator = new CommentGenerator();
-	var i;
+	var count = 0;
 
-	sourceComments.forEach(function (comment) {
-		comment = fixComment(comment);
+	stream.on('data', function (comment) {
+		var text = fixComment(comment.text);
 
-		if (comment.length >= MIN_COMMENT_LENGTH) {
-			generator.feed(comment);
+		if (text.length >= MIN_COMMENT_LENGTH) {
+			console.log('feeding... ', ++count);
+			generator.feed(text);
 		}
 	});
 
-	for (i = 0; i < COMMENTS_TO_GENERATE; ++i) {
-		console.log(generator.generate(), '\n\n--------\n');
-	}
+	stream.on('error', function (err) {
+		console.error(err);
+		exitCode = 1;
+	});
+
+	stream.on('end', function () {
+		onReady(generator);
+	});
 }
 
-// fetchYouTubeComments(VIDEO_ID, MAX_COMMENT_PAGES).then(generateComments);
-fetchSampleComments().then(generateComments);
+// feed comments into generator then generate some comments
+initGenerator(function (generator) {
+	var i;
+
+	for (i = 0; i < COMMENTS_TO_GENERATE; ++i) {
+		i && console.log('\n--------\n');
+		console.log(generator.generate());
+	}
+
+	exitCode = 0;
+});
+
+// prevent script from exiting while we're waiting for async events
+(function waitForCompletion() {
+	if (exitCode === undefined) {
+		setTimeout(waitForCompletion, 250);
+	}
+	else {
+		process.exitCode = exitCode;
+	}
+})();
