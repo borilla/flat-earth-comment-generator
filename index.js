@@ -9,7 +9,7 @@ var COMMENTS_TO_GENERATE = 10;
 var exitCode;
 
 function initGenerator(onReady) {
-	var stream = commentsStream.mock(sampleComments);
+	var stream = commentsStream.get(VIDEO_ID);
 	var generator = new CommentGenerator();
 	var count = 0;
 
@@ -17,7 +17,7 @@ function initGenerator(onReady) {
 		var text = fixComment(comment.text);
 
 		if (text.length >= MIN_COMMENT_LENGTH) {
-			console.log('feeding... ', ++count);
+			console.log('feeding...', ++count);
 			generator.feed(text);
 		}
 	});
