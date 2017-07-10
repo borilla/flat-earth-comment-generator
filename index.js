@@ -4,20 +4,23 @@ var fixComment = require('./lib/fix-comment');
 var CommentGenerator = require('./lib/comment-generator');
 
 var VIDEO_ID = 'ksSZPNQaFP8';
-var MIN_COMMENT_LENGTH = 40;
-var COMMENTS_TO_GENERATE = 10;
+var MIN_SOURCE_COMMENT_LENGTH = 60;
+var COMMENTS_TO_GENERATE = 20;
+var N_GRAM_LENGTH = 12;
 var exitCode;
 
 function initGenerator(onReady) {
 	var stream = commentsStream.get(VIDEO_ID);
-	var generator = new CommentGenerator();
+	var generator = new CommentGenerator(N_GRAM_LENGTH);
 	var count = 0;
+
+	console.log('Loading comments. Please wait...');
 
 	stream.on('data', function (comment) {
 		var text = fixComment(comment.text);
 
-		if (text.length >= MIN_COMMENT_LENGTH) {
-			console.log('feeding...', ++count);
+		if (text.length >= MIN_SOURCE_COMMENT_LENGTH) {
+//			console.log('feeding...', ++count);
 			generator.feed(text);
 		}
 	});
@@ -37,7 +40,7 @@ initGenerator(function (generator) {
 	var i;
 
 	for (i = 0; i < COMMENTS_TO_GENERATE; ++i) {
-		i && console.log('\n--------\n');
+		console.log('\n--------\n');
 		console.log(generator.generate());
 	}
 
